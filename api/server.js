@@ -45,4 +45,11 @@ app.delete("/todo/delete/:id", async (req, res) => {
   res.json(response);
 });
 
+app.put("/todo/complete/:id", async (req, res) => {
+  const todo = await Todo.findById(req.params.id);
+  todo.complete = !todo.complete;
+  todo.save();
+  res.json(todo);
+});
+
 app.listen(PORT, () => console.log("Server run on port " + PORT));
