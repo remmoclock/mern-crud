@@ -22,6 +22,7 @@ mongoose
 
 // Models
 const Todo = require("./models/Todo");
+const { findByIdAndDelete } = require("./models/Todo");
 
 app.get("/todos", async (req, res) => {
   const todos = await Todo.find();
@@ -37,6 +38,11 @@ app.post("/todo/new", (req, res) => {
   todo.save();
 
   res.json(todo);
+});
+
+app.delete("/todo/delete/:id", async (req, res) => {
+  const response = await Todo.findByIdAndDelete(req.params.id);
+  res.json(response);
 });
 
 app.listen(PORT, () => console.log("Server run on port " + PORT));
