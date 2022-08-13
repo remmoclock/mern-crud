@@ -1,6 +1,26 @@
+import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
+  const api_base = "http://localhost:3000";
+
+  const [todos, setTodos] = useState([]);
+  const [popupActive, setPopupActive] = useState(false);
+  const [newTodo, setNewTodo] = useState("");
+
+  useEffect(() => {
+    GetTodos();
+  }, []);
+
+  const GetTodos = () => {
+    fetch(api_base + "/todos")
+      .then((res) => res.json())
+      .then((data) => setTodos(data))
+      .catch((err) => console.error("Error: ", err));
+  };
+
+  console.log("todos", todos);
+
   return (
     <div className="App">
       <h1>Bonjour</h1>
