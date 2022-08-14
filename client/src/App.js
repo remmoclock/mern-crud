@@ -15,6 +15,10 @@ function App() {
       .catch((err) => console.error("Error: ", err));
   };
 
+  useEffect(() => {
+    GetTodos();
+  }, []);
+
   const completeTodo = async (id) => {
     const data = await fetch(api_base + "/todo/complete/" + id).then((res) =>
       res.json()
@@ -31,9 +35,17 @@ function App() {
     );
   };
 
-  useEffect(() => {
-    GetTodos();
-  }, []);
+  const deleteTodo = async (id) => {
+    const data = await fetch(api_base + "/todo/delete/" + id, {
+      method: "DELETE",
+    }).then((res) => res.json());
+
+    setTodos(
+      (todos) =>
+        todos.length > 0 &&
+        todos?.filter((todo) => todo?._id !== data?.result._id)
+    );
+  };
 
   console.log("todos", todos);
 
@@ -41,7 +53,7 @@ function App() {
     <div className="App">
       <h1>Bonjour</h1>
       <h4>
-        {todos.length} {todos.length > 1 ? "Tâches" : "Tâche"}
+        {todos?.length} {todos?.length > 1 ? "Tâches" : "Tâche"}
       </h4>
 
       <div className="todos">
@@ -55,7 +67,12 @@ function App() {
               >
                 <div className="checkbox"></div>
                 <div className="text">{todo.text}</div>
-                <div className="delete-todo">x</div>
+                <div
+                  className="delete-todo"
+                  onClick={() => deleteTodo(todo._id)}
+                >
+                  x
+                </div>
               </div>
             );
           })}

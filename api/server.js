@@ -41,8 +41,8 @@ app.post("/todo/new", (req, res) => {
 });
 
 app.delete("/todo/delete/:id", async (req, res) => {
-  const response = await Todo.findByIdAndDelete(req.params.id);
-  res.json(response);
+  const result = await Todo.findByIdAndDelete(req.params.id);
+  res.json({ result });
 });
 
 app.get("/todo/complete/:id", async (req, res) => {
