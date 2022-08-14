@@ -24,7 +24,9 @@ function App() {
   return (
     <div className="App">
       <h1>Bonjour</h1>
-      <h4>Tâches</h4>
+      <h4>
+        {todos.length} {todos.length > 1 ? "Tâches" : "Tâche"}
+      </h4>
 
       <div className="todos">
         {todos &&
