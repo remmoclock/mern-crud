@@ -47,6 +47,23 @@ function App() {
     );
   };
 
+  const addTodo = async () => {
+    const data = await fetch(api_base + "/todo/new", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        text: newTodo,
+      }),
+    }).then((res) => res.json());
+
+    setTodos([...todos, data]);
+
+    setPopupActive(false);
+    setNewTodo("");
+  };
+
   console.log("todos", todos);
 
   return (
@@ -77,6 +94,29 @@ function App() {
             );
           })}
       </div>
+      <div className="addPopup" onClick={() => setPopupActive(true)}>
+        +
+      </div>
+
+      {popupActive && (
+        <div className="popup">
+          <div className="closePopup" onClick={() => setPopupActive(false)}>
+            X
+          </div>
+          <div className="content">
+            <h3> Créer une tâche</h3>
+            <input
+              type="text"
+              className="add-todo-input"
+              onChange={(e) => setNewTodo(e.target.value)}
+              value={newTodo}
+            />
+            <div className="button" onClick={addTodo}>
+              Ajouter
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
