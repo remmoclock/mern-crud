@@ -8,10 +8,6 @@ function App() {
   const [popupActive, setPopupActive] = useState(false);
   const [newTodo, setNewTodo] = useState("");
 
-  useEffect(() => {
-    GetTodos();
-  }, []);
-
   const GetTodos = () => {
     fetch(api_base + "/todos")
       .then((res) => res.json())
@@ -19,23 +15,31 @@ function App() {
       .catch((err) => console.error("Error: ", err));
   };
 
+  useEffect(() => {
+    GetTodos();
+  }, []);
+
   console.log("todos", todos);
 
   return (
     <div className="App">
       <h1>Bonjour</h1>
       <h4>Tâches</h4>
+
       <div className="todos">
-        <div className="todo">
-          <div className="checkbox"></div>
-          <div className="text">Faire le Ménage</div>
-          <div className="delete-todo">x</div>
-        </div>
-        <div className="todo is-complete">
-          <div className="checkbox"></div>
-          <div className="text">Rdv médecin</div>
-          <div className="delete-todo">x</div>
-        </div>
+        {todos &&
+          todos.map((todo) => {
+            return (
+              <div
+                className={`todo ${todo.complete && "is-complete"}`}
+                key={todo._id}
+              >
+                <div className="checkbox"></div>
+                <div className="text">{todo.text}</div>
+                <div className="delete-todo">x</div>
+              </div>
+            );
+          })}
       </div>
     </div>
   );
