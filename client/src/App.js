@@ -106,7 +106,7 @@ function App() {
 
     setTodos([...todos, data]);
 
-    setPopupActive(false);
+    setPopupActive2(false);
     setNewTodo("");
   };
 
@@ -165,11 +165,9 @@ function App() {
         <Popup
           setPopupActive={setPopupActive}
           selectedTodo={selectedTodo}
-          saveTodo={updateTodo}
           updateTodo={updateTodo}
           handleUpdate={handleUpdate}
           value={value}
-          popupActive={popupActive}
           title="Modifier une tâche"
           textButton="Sauvegarder"
         />
@@ -177,13 +175,12 @@ function App() {
       {popupActive2 && (
         <Popup
           setPopupActive={setPopupActive2}
-          selectedTodo={selectedTodo}
-          saveTodo={addTodo}
           addTodo={addTodo}
-          handleUpdate={handleUpdate}
           value={value}
           title="Ajouter une tâche"
           textButton="Ajouter"
+          setNewTodo={setNewTodo}
+          newTodo={newTodo}
         />
       )}
     </div>

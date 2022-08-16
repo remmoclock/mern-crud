@@ -5,8 +5,10 @@ function Popup({
   value,
   title,
   textButton,
-  saveTodo,
   updateTodo,
+  addTodo,
+  newTodo,
+  setNewTodo,
 }) {
   console.log("textButton", textButton);
   return (
@@ -16,18 +18,34 @@ function Popup({
       </div>
       <div className="content">
         <h3>{title}</h3>
-        <input
-          type="text"
-          className="add-todo-input"
-          onChange={(e) => handleUpdate(e)}
-          value={value}
-        />
-        <div className="button" onClick={() => updateTodo(selectedTodo._id)}>
-          Sauvegarder
-        </div>
-        {/* <div className="button" onClick={() => addTodo()}>
-          Ajouter
-        </div> */}
+        {textButton === "Sauvegarder" ? (
+          <>
+            <input
+              type="text"
+              className="add-todo-input"
+              onChange={(e) => handleUpdate(e)}
+              value={value}
+            />
+            <div
+              className="button"
+              onClick={() => updateTodo(selectedTodo._id)}
+            >
+              {textButton}
+            </div>
+          </>
+        ) : (
+          <>
+            <input
+              type="text"
+              className="add-todo-input"
+              onChange={(e) => setNewTodo(e.target.value)}
+              value={newTodo}
+            />
+            <div className="button" onClick={() => addTodo()}>
+              {textButton}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
