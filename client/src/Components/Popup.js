@@ -14,7 +14,7 @@ function Popup({
   return (
     <div className="popup">
       <div className="closePopup" onClick={() => setPopupActive(false)}>
-        X
+        ❌
       </div>
       <div className="content">
         <h3>{title}</h3>
