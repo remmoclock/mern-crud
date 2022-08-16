@@ -133,9 +133,11 @@ function App() {
               <div
                 className={`todo ${todo.complete && "is-complete"}`}
                 key={todo._id}
-                onClick={() => completeTodo(todo._id)}
               >
-                <div className="checkbox"></div>
+                <div
+                  className={`checkbox ${todo.complete && "is-complete"}`}
+                  onClick={() => completeTodo(todo._id)}
+                ></div>
                 <div className="text">{todo.text}</div>
                 <div
                   className="delete-todo"
@@ -151,7 +153,7 @@ function App() {
                     setValue(todo.text);
                   }}
                 >
-                  :
+                  ⁝
                 </div>
               </div>
             );
