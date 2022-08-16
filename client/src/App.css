@@ -93,6 +93,22 @@ h4 {
 	font-weight: 700;
 }
 
+.todo .update-todo {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	right: 55px;
+	color: var(--light);
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	background-color: var(--secondary);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 700;
+}
+
 .addPopup {
 	position: fixed;
 	bottom: 32px;

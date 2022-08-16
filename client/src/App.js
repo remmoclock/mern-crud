@@ -1,12 +1,20 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import Popup from "./Components/Popup";
 
 function App() {
   const api_base = "http://localhost:3000";
 
   const [todos, setTodos] = useState([]);
   const [popupActive, setPopupActive] = useState(false);
+  const [popupActive2, setPopupActive2] = useState(false);
   const [newTodo, setNewTodo] = useState("");
+  const [selectedTodo, setSelectedTodo] = useState();
+  const [value, setValue] = useState();
+
+  const handleUpdate = (e) => {
+    setValue(e.target.value);
+  };
 
   const GetTodos = () => {
     fetch(api_base + "/todos")
@@ -47,6 +55,44 @@ function App() {
     );
   };
 
+  // const updateTodo = (id) => {
+  //   fetch(api_base + "/todo/update/" + id, {
+  //     method: "PUT",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: {
+  //       text: selectedTodo.text,
+  //     },
+  //   }).then((res) => {
+  //     console.log("res", res.json());
+  //   });
+
+  const updateTodo = async (id) => {
+    let rep = await fetch(api_base + "/todo/update/" + id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        text: value,
+      }),
+    });
+    let response = await rep.json();
+    console.log("rep", response);
+
+    const allTasksTodos = [...todos];
+    const allTasks = allTasksTodos.map((todo) => {
+      return todo._id === response._id
+        ? { ...todo, text: response.text }
+        : todo;
+    });
+
+    setTodos(allTasks);
+
+    setPopupActive(false);
+  };
+
   const addTodo = async () => {
     const data = await fetch(api_base + "/todo/new", {
       method: "POST",
@@ -64,13 +110,20 @@ function App() {
     setNewTodo("");
   };
 
-  console.log("todos", todos);
+  const tasksNotCompleted = todos.filter((todo) => {
+    return !todo.complete;
+  });
 
   return (
     <div className="App">
       <h1>Bonjour</h1>
       <h4>
-        {todos?.length} {todos?.length > 1 ? "Tâches" : "Tâche"}
+        {tasksNotCompleted.length}{" "}
+        {tasksNotCompleted.length > 1
+          ? "Tâches restantes"
+          : tasksNotCompleted.length > 0
+          ? "Tâche restante"
+          : "Tâche"}
       </h4>
 
       <div className="todos">
@@ -90,32 +143,48 @@ function App() {
                 >
                   x
                 </div>
+                <div
+                  className="update-todo"
+                  onClick={() => {
+                    setSelectedTodo(todo);
+                    setPopupActive(true);
+                    setValue(todo.text);
+                  }}
+                >
+                  :
+                </div>
               </div>
             );
           })}
       </div>
-      <div className="addPopup" onClick={() => setPopupActive(true)}>
+      <div className="addPopup" onClick={() => setPopupActive2(true)}>
         +
       </div>
 
       {popupActive && (
-        <div className="popup">
-          <div className="closePopup" onClick={() => setPopupActive(false)}>
-            X
-          </div>
-          <div className="content">
-            <h3> Créer une tâche</h3>
-            <input
-              type="text"
-              className="add-todo-input"
-              onChange={(e) => setNewTodo(e.target.value)}
-              value={newTodo}
-            />
-            <div className="button" onClick={addTodo}>
-              Ajouter
-            </div>
-          </div>
-        </div>
+        <Popup
+          setPopupActive={setPopupActive}
+          selectedTodo={selectedTodo}
+          saveTodo={updateTodo}
+          updateTodo={updateTodo}
+          handleUpdate={handleUpdate}
+          value={value}
+          popupActive={popupActive}
+          title="Modifier une tâche"
+          textButton="Sauvegarder"
+        />
+      )}
+      {popupActive2 && (
+        <Popup
+          setPopupActive={setPopupActive2}
+          selectedTodo={selectedTodo}
+          saveTodo={addTodo}
+          addTodo={addTodo}
+          handleUpdate={handleUpdate}
+          value={value}
+          title="Ajouter une tâche"
+          textButton="Ajouter"
+        />
       )}
     </div>
   );
